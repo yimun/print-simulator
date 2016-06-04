@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <title>DPM数字印刷机主控系统</title>
+    <script src="js/jquery.min.js"></script>
+    <style type="text/css">
+    .count {
+        color: red;
+        margin-left: 4px;
+    }
+    </style>
+</head>
+
+<body>
+    <nav class="nav navbar-default">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">DPM数字印刷机主控系统</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">打印管理 <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">关于</a></li>
+                </ul>
+                <div class="navbar-form navbar-right" role="search">
+                    <!-- <a id="action_select" data-toggle="modal" data-target="#errorModal" class="btn btn-default">错误页</a> -->
+                    <a id="action_select" data-toggle="modal" data-target="#selectWork" class="btn btn-default">提交作业</a>
+                    <a id="action_begin" class="btn btn-success" onclick="startWork()">开始</a>
+                    <a id="action_reset" class="btn btn-danger" onclick="window.location.reload();">重置</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="padding: 30px;">
+        <div class="row">
+            <div class="col-md-9">
+                <ul class="nav nav-pills">
+                    <li role="presentation" class="active"><a href="#tab-work" aria-controls="tab-work" role="tab" data-toggle="tab">作业队列<span class="count" id="work-count">0</span></a></li>
+                    <li role="presentation"><a href="#tab-print" aria-controls="tab-print" role="tab" data-toggle="tab">打印队列<span class="count" id="print-count">0</span></a></li>
+                    <li role="presentation"><a href="#tab-complete" aria-controls="tab-complete" role="tab" data-toggle="tab">完成队列<span class="count" id="complete-count">0</span></a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" id="tab-work" class="tab-pane fade in active">
+                        <div class="panel panel-default" style="margin-top: 20px;height: 400px;overflow: auto;">
+                            <table id="works-list" class="table" style="overflow: scroll">
+                                <thead>
+                                    <tr>
+                                        <th>作业名称</th>
+                                        <th>尺寸</th>
+                                        <th>设备分辨率</th>
+                                        <th>打印份数</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tab-print">
+                        <div class="panel panel-default" style="margin-top: 20px;height: 400px;overflow: auto;">
+                            <table id="print-list" class="table" style="overflow: scroll">
+                                <thead>
+                                    <tr>
+                                        <th>作业名称</th>
+                                        <th>尺寸</th>
+                                        <th>设备分辨率</th>
+                                        <th>打印份数</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tab-complete">
+                        <div class="panel panel-default" style="margin-top: 20px;height: 400px;overflow: auto;">
+                            <table id="complete-list" class="table" style="overflow: scroll">
+                                <thead>
+                                    <tr>
+                                        <th>作业名称</th>
+                                        <th>尺寸</th>
+                                        <th>设备分辨率</th>
+                                        <th>打印份数</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default" style="margin-top: 20px;height: 320px;">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">预视</div>
+                    <!-- Table -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>消息时间</th>
+                                <th>消息内容</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="msg-time"></td>
+                                <td id="msg-name"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-top:0px;">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">设备状态</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>System Status: <span id="system-status">Offline</span></p>
+                        <p>Maint State: <span id="maint-state">Yes</span></p>
+                        <p>Maint Error: <span id="maint-error">No</span></p>
+                        <p>Maint Active: <span id="maint-active">No</span></p>
+                        <p>Job Queue: <span id="job-queue">0</span></p>
+                        <p>In Job: <span id="in-job">No</span></p>
+                        <p>Page Count: <span id="page-count">0</span></p>
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">作业信息</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>作业名称: <span id="current-work-name"></span></p>
+                        <p>总印量: <span id="current-work-copies"></span></p>
+                        <p>已完成: <span id="current-work-complete"></span></p>
+                        <p>当前打印速度: <span id="current-speed"></span></p>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">打印控制器</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p><b>状态：</b>准备</p>
+                        <p><b>墨量：</b></p>
+                        <div class="progress">
+                            <div id="C" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;background:rgb(165, 247, 220);">
+                                40%
+                            </div>
+                        </div>
+                        <div class="progress">
+                            <div id="M" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%; background: rgb(240, 52, 204);">
+                                20%
+                            </div>
+                        </div>
+                        <div class="progress">
+                            <div id="Y" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;background: rgb(250, 250, 38);">
+                                60%
+                            </div>
+                        </div>
+                        <div class="progress">
+                            <div id="K" class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%; background: rgb(0, 0, 0);">
+                                80%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+        console.log('end');
+        </script>
+        <script src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+        <script type="text/javascript" src="js/modal.js"></script>
+    </div>
+</body>
+<div class="modal fade" id="selectWork" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">选择作业</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">作业文件:</label>
+                        <input type="file" class="form-control" id="file">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> -->
+                <button id="modal-submit" type="button" class="btn btn-success" data-dismiss="modal" onclick="selectFile()">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">打印页面错误了</h4>
+            </div>
+            <div class="modal-body">
+                <p>作业名称： <span id="error-name">作业1</span></p>
+                <p>错误页下标： <span id="error-index">1</span></p>
+                <p>错误页详情：</p>
+                <div id="error-img" style="height: 500px; overflow:auto;" >
+                    <img id="img" border="0" src="http://dingyue.nosdn.127.net/Y7SVGwNePScxfmQQ0htSFP4KvuV4BWdSxhbMMN2JVRZFu1464971632976.jpg" onmousewheel="bbimg(this)">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">暂停</button>
+                <button id="modal-submit" type="button" class="btn btn-success" data-dismiss="modal" onclick="startWork()">继续</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

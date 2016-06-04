@@ -1,0 +1,91 @@
+{
+    "device": {
+        "name": "测试用打印机1",
+        "x": 600,
+        "y": 800,
+        "system_status": "Online",
+        "maint_state": "Yes",
+        "maint_error": "No",
+        "maint_active": "Yes",
+
+        "ink_box": {
+            "C": 0.8,
+            "M": 0.2,
+            "Y": 0.5,
+            "K": 0.6,
+        },
+
+    },
+
+    "works_list": [{
+            "device": null,
+            "name": "作业1",
+            "page_count": 10,
+            "size_x": 600,
+            "size_y": 800,
+            "copies": 10,
+
+        }, {
+            "device": null,
+            "name": "作业2",
+            "page_count": 8,
+            "size_x": 600,
+            "size_y": 800,
+            "copies": 5,
+            "error_page": {
+                "index": 3,
+                "img": "img/error1.jpg"
+            }
+
+        }, {
+            "device": null,
+            "name": "作业4",
+            "page_count": 8,
+            "size_x": 600,
+            "size_y": 800,
+            "copies": 6,
+        }, {
+            "device": null,
+            "name": "作业5",
+            "page_count": 8,
+            "size_x": 600,
+            "size_y": 800,
+            "copies": 7,
+        },{
+            "device": null,
+            "name": "作业6",
+            "page_count": 10,
+            "size_x": 600,
+            "size_y": 800,
+            "copies": 11,
+        }, {
+            "device": null,
+            "name": "作业7",
+            "page_count": 8,
+            "size_x": 600,
+            "size_y": 800,
+            "copies": 5,
+        }, {
+            "device": null,
+            "name": "作业8",
+            "page_count": 8,
+            "size_x": 600,
+            "size_y": 800,
+            "copies": 2,
+            "error_page": {
+                "index": 1,
+                "img": "img/error2.jpg"
+            }
+        }, {
+            "device": null,
+            "name": "作业9",
+            "page_count": 8,
+            "size_x": 600,
+            "size_y": 800,
+            "copies": 12,
+        },
+
+    ],
+
+
+}
